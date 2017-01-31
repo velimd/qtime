@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Add Poll</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+    	<form ng-submit="addPoll()">
+        <div class="form-group">
+          <label>Question</label>
+          <input type="text" class="form-control" ng-model="poll.Question" placeholder="Enter Question">
+       </div> 
+       <div class="form-group">
+          <label>Choice 1</label>
+          <input type="text" class="form-control" ng-model="poll.Answer1" placeholder="Enter Choice">
+       </div>
+       <div class="form-group">
+          <label>Choice 2</label>
+          <input type="text" class="form-control" ng-model="poll.Answer2" placeholder="Enter Choice">
+       </div>
+       <div class="form-group">
+          <label>Choice 3</label>
+          <input type="text" class="form-control" ng-model="poll.Answer3" placeholder="Enter Choice">
+       </div>
+       <div class="form-group">
+          <label>Choice 4</label>
+          <input type="text" class="form-control" ng-model="poll.Answer4" placeholder="Enter Choice">
+       </div> 
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+<a class="btn btn-danger" href="#!/polls"> Back</a>

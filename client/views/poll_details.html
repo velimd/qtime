@@ -1,0 +1,29 @@
+<a class="btn btn-danger" href="#!/polls"> Back</a>
+<p></p>
+<div class="panel panel-default" ng-init="getPoll()">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{poll.Question}}</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+    	<div class="col-md-4">
+        <ul class="list-group">
+          <li class="list-group-item">A: {{poll.Answer1}}</li>
+          <li class="list-group-item">B: {{poll.Answer2}}</li>
+          <li class="list-group-item">C: {{poll.Answer3}}</li>
+          <li class="list-group-item">D: {{poll.Answer4}}</li>
+        </ul>
+        <ul class="list-group">
+          <li class="list-group-item">A: {{poll.Score1}}</li>
+          <li class="list-group-item">B: {{poll.Score2}}</li>
+          <li class="list-group-item">C: {{poll.Score3}}</li>
+          <li class="list-group-item">D: {{poll.Score4}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pull right">
+<a class="btn btn-primary" href="#!/polls/edit/{{poll._id}}"> Edit</a> 
+<a class="btn btn-danger" href="#" ng-click="removePoll(poll._id)">Delete</a>
+</div>

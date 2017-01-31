@@ -1,0 +1,16 @@
+<div class="panel panel-default" ng-init="getPolls()">
+  <div class="panel-heading">
+    <h3 class="panel-title">Questions</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+    	<div ng-repeat="poll in polls">
+    		<ul class="list">
+          <li>
+            <a href="#!/polls/details/{{poll._id}}"> {{poll.Question}}</a>
+            </li>
+    		</ul>
+    	</div>
+    </div>
+  </div>
+</div>
