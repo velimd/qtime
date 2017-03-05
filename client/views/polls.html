@@ -14,3 +14,19 @@
     </div>
   </div>
 </div>
+<div class="panel panel-default" ng-init="getQuizzes()">
+  <div class="panel-heading">
+    <h3 class="panel-title">Quizzes</h3>
+  </div>
+  <div class="panel-body">
+      <div class="row">
+        <div ng-repeat="quiz in quizzes">
+          <ul class="list">
+            <li>
+              <a href="#!/quiz/details/{{quiz._id}}"> {{quiz.title}}</a>
+              </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</div>

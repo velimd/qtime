@@ -37,4 +37,55 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 			window.location.href='#!/polls';
 		});
 	}
+
+	$scope.getQuizzes=function(){
+		$http.get('/api/allquiz').then(function(response){
+			console.log(response.data);
+			$scope.quizzes= response.data;
+		});
+	}
+
+	$scope.getQuiz=function(){
+		var id = $routeParams.id
+		$http.get('/api/quiz/'+id).then(function(response){
+			console.log(response.data);
+			$scope.quiz= response.data;
+		});
+	}
+
+	$scope.addQuiz=function(){
+		console.log($scope.quiz);
+		$http.post('/api/quiz/', $scope.quiz).then(function(response){
+			window.location.href='#!/polls';
+		});
+	}
+
+	$scope.updateQuiz=function(){
+		var id = $routeParams.id;
+		$http.put('/api/quiz/'+id, $scope.quiz).then(function(response){
+			window.location.href='#!/polls';
+		});
+	}
+
+	$scope.removeQuiz=function(id){
+		$http.delete('/api/quiz/'+id).then(function(response){
+			window.location.href='#!/polls';
+		});
+	}
+
+	$scope.addQuizPoll=function(){
+		var id = $routeParams.id;
+		console.log(id);
+		$http.post('/api/quizpoll/'+id, $scope.quizpoll).then(function(response){
+			window.location.href='#!/polls';
+		});
+	}
+
+	$scope.getQuizPoll=function(){
+		var id = $routeParams.id
+		$http.get('/api/quizpoll/'+id).then(function(response){
+			console.log(response.data);
+			$scope.quizpoll= response.data;
+		});
+	}
 }]);

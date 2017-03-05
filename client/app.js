@@ -29,6 +29,22 @@ myApp.config(function($routeProvider){
 		controller:'PollsController',
 		templateUrl: 'views/edit_poll.html'
 	})
+	.when('/quiz/add',{
+		controller:'PollsController',
+		templateUrl: 'views/add_quiz.html'
+	})
+	.when('/quiz/edit/:id',{
+		controller:'PollsController',
+		templateUrl: 'views/edit_quiz.html'
+	})
+	.when('/quiz/details/:id',{
+		controller:'PollsController',
+		templateUrl: 'views/quiz_details.html'
+	})
+	.when('/quiz/addpoll/:id',{
+		controller:'PollsController',
+		templateUrl: 'views/add_quizpoll.html'
+	})
 	.otherwise({
 		redirectTo: '/'
 	});

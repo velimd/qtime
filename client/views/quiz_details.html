@@ -1,0 +1,23 @@
+<a class="btn btn-danger" href="#!/polls"> Back</a>
+<p></p>
+<div class="panel panel-default" ng-init="getQuiz(); getQuizPoll()">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{quiz.title}}</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+    	<div ng-repeat="q in quizpoll">
+    		<ul class="list">
+          <li>
+            <a href="#!/polls/details/{{q._id}}"> {{q.Question}}</a>
+            </li>
+    		</ul>
+    	</div>
+    </div>
+  </div>
+</div>
+<div class="pull right">
+<a class="btn btn-primary" href="#!/quiz/edit/{{quiz._id}}"> Edit</a> 
+<a class="btn btn-danger" href="#" ng-click="removeQuiz(quiz._id)">Delete</a>
+<a class="btn btn-primary" href="#!/quiz/addpoll/{{quiz._id}}"> Add</a> 
+</div>
