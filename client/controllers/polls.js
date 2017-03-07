@@ -39,7 +39,7 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 	}
 
 	$scope.getQuizzes=function(){
-		$http.get('/api/allquiz').then(function(response){
+		$http.get('/api/quiz').then(function(response){
 			console.log(response.data);
 			$scope.quizzes= response.data;
 		});

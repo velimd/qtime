@@ -146,6 +146,15 @@ app.delete('/api/polls/:_id', function(req, res){
 });
 /////////////////////////////////////quiz
 
+app.get('/api/quiz', function(req, res){
+	Polls.getQuiz(user, function(err, quiz){
+		if(err){
+			throw err;
+		}
+		res.json(quiz);
+	});
+});
+
 app.get('/api/allquiz', function(req, res){
 	Polls.getAllQuiz(function(err, quiz){
 		if(err){

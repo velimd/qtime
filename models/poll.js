@@ -52,7 +52,7 @@ var quizSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
-	user:{type: String}
+	user:{type: String, required: true}
 });
 
 
@@ -97,7 +97,7 @@ module.exports.deletePoll = function(id, callback){
 
 /////////////////////////////
 module.exports.getQuiz = function(username, callback, limit){
-	Polls.find({user:username}, callback).limit(limit);
+	Quiz.find({user:username}, callback).limit(limit);
 }
 
 //get quizes
