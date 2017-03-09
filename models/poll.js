@@ -89,6 +89,30 @@ module.exports.updatePoll = function(id, poll, options, callback){
 	Polls.findOneAndUpdate(query, update, options, callback);
 }
 
+//Answer1
+module.exports.updateAnswer1 = function(id, options, callback){
+	var query = {_id: id};
+	Polls.findOneAndUpdate(query, {$inc: {Score1:1}}, options, callback);
+}
+
+//Answer2
+module.exports.updateAnswer2 = function(id, options, callback){
+	var query = {_id: id};
+	Polls.findOneAndUpdate(query, {$inc: {Score2:1}}, options, callback);
+}
+
+//Answer3
+module.exports.updateAnswer3 = function(id, options, callback){
+	var query = {_id: id};
+	Polls.findOneAndUpdate(query, {$inc: {Score3:1}}, options, callback);
+}
+
+//Answer4
+module.exports.updateAnswer4 = function(id, options, callback){
+	var query = {_id: id};
+	Polls.findOneAndUpdate(query, {$inc: {Score4:1}}, options, callback);
+}
+
 //Delete Poll
 module.exports.deletePoll = function(id, callback){
 	var query = {_id: id};

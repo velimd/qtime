@@ -205,6 +205,45 @@ app.put('/api/quiz/:_id', function(req, res){
 	});
 });
 
+app.put('/api/answer1/:_id', function(req, res){
+	var id = req.params._id;
+	Polls.updateAnswer1(id, {}, function(err, poll){
+		if(err){
+			throw err;
+		}
+		res.json(poll);
+	});
+});
+
+app.put('/api/answer2/:_id', function(req, res){
+	var id = req.params._id;
+	Polls.updateAnswer2(id, {}, function(err, poll){
+		if(err){
+			throw err;
+		}
+		res.json(poll);
+	});
+});
+
+app.put('/api/answer3/:_id', function(req, res){
+	var id = req.params._id;
+	Polls.updateAnswer3(id, {}, function(err, poll){
+		if(err){
+			throw err;
+		}
+		res.json(poll);
+	});
+});
+
+app.put('/api/answer4/:_id', function(req, res){
+	var id = req.params._id;
+	Polls.updateAnswer4(id, {}, function(err, poll){
+		if(err){
+			throw err;
+		}
+		res.json(poll);
+	});
+});
 app.delete('/api/quiz/:_id', function(req, res){
 	var id = req.params._id;
 	Polls.deleteQuiz(id, function(err, quiz){
