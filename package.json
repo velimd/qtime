@@ -10,12 +10,12 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "*",
+    "express-session":"*",
     "mongoose": "*",
     "bcryptjs": "*",
-    "jwt-simple": "^0.3.1",
     "morgan": "~1.5.0",
     "passport": "^0.3.0",
-    "passport-jwt": "^1.2.1"
+    "passport-local": "*"
   },
   "author": "Velican Duzgunce",
   "license": "ISC"

@@ -44,7 +44,7 @@ var pollsSchema = mongoose.Schema({
 	},
 	user:{ type: String, required: true},
 	quiz: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'}],
-	isQuizPoll:{type: String, default:"yes"}
+	isQuizPoll:{type: String, default:"no"}
 });
 
 var quizSchema = mongoose.Schema({
@@ -60,7 +60,7 @@ var Polls = module.exports = mongoose.model('Polls', pollsSchema);
 var Quiz = module.exports = mongoose.model('Quiz', quizSchema)
 // Get  Polls
 module.exports.getPolls = function(username, callback, limit){
-	Polls.find({user:username, isQuizPoll:"yes"}, callback).limit(limit);
+	Polls.find({user:username, isQuizPoll:"no"}, callback).limit(limit);
 }
 module.exports.getAllPolls = function(callback, limit){
 	Polls.find(callback).limit(limit);

@@ -1,10 +1,10 @@
 var express = require('express');
+var session = require('express-session');
 var app = express();
 var bodyParse = require('body-parser');
 var mongoose = require('mongoose');
-var morgan = require('morgan');
 var passport = require('passport');
-var jwt = require('jwt-simple');
+var LocalStrategy = require('passport-local').Strategy;
 
 app.use(express.static(__dirname+'/client'));
 
@@ -12,9 +12,6 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// log to console
-app.use(morgan('dev'));
- 
 // Use the passport package in our application
 app.use(passport.initialize());
 
@@ -22,11 +19,24 @@ app.use(passport.initialize());
 var config = require('./config/database');
 mongoose.connect(config.database);
 
-require('./config/passport')(passport);
+//require('./config/passport')(passport);
 
+//sessions
+app.use(session({
+	secret:'secret',
+	saveUninitialized:true,
+	resave:true
+}));
+
+app.use(passport.session());
 //gobal variables
-global.user = null;
-global.isAuth=false;
+app.use(function (req, res, next) {
+	res.locals.user=null;
+	res.locals.isAuth=false;
+	next();
+});
+//global.user = null;
+//global.isAuth=false;
 
 var User = require('./models/user');
 
@@ -36,41 +46,53 @@ app.post('/api/signup', function(req, res) {
 		res.json({success:false, msg: 'Please enter username and password'});
 	}
 	else{
-	var newUser = new User({
-		username:req.body.username,
-		password:req.body.password
-	});
-	User.createUser(newUser, function(err, user){
-		if (err) {
-	        return res.json({success: false, msg: 'Username already exists.'});
-	    }
-	    res.json({success: true, msg: 'Successful created new user.'});
-	})
-}
+		var newUser = new User({
+			username:req.body.username,
+			password:req.body.password
+		});
+		User.createUser(newUser, function(err, user){
+			if (err) {
+		        return res.json({success: false, msg: 'Username already exists.'});
+		    }
+		    res.json({success: true, msg: 'Successful created new user.'});
+		})
+	}
 });
 
-app.post('/api/authenticate', function(req, res) {
-	User.findOne({
-		username:req.body.username
-	}, function(err, user) {
-		if(!user){
-			res.send({success: false, msg: 'User not found'});
-		}
-		else{
-			user.comparePassword(req.body.password, function(err, isMatch) {
-				if(isMatch){
-					var token = jwt.encode(user, config.secret);
-					res.json({success: true, token: 'JWT ' + token});
-					isAuth=true;
-					this.user=user.username;
-				}
-				else{
-					res.json({success: false, msg: 'Authentication falied. Wrong username or password'});
-				}
-			
-		});
-		}
+passport.use(new LocalStrategy(function(username, password, done) {
+	    User.findOne({username: username}, function(err, user) {
+	        if (err) {
+	            return done(err, false);
+	        }
+	        if (user) {
+	        	user.comparePassword(password, function(err, isMatch) {
+					if(isMatch){
+						isAuth=true;
+						this.user=user.username;
+						done(null, user);
+					}
+					else{
+						done(null, false);
+					}
+				});
+	        } else {
+	            done(null, false);
+	        }
+	    });
+}));
+
+	passport.serializeUser(function(user, done) {
+  		done(null, user.id);
 	});
+
+	passport.deserializeUser(function(id, done) {
+  		User.getUserById(id, function(err, user) {
+    	done(err, user);
+  		});
+	});
+
+app.post('/api/authenticate', passport.authenticate('local'), function(req, res) {
+	res.json({success: true, msg: 'Successful login.'});
 });
 
 /////////////////////////////////////poll
@@ -263,7 +285,7 @@ app.post('/api/quizpoll/:_id', function(req, res){
 			"Answer4": req.body.Answer4,
 			"user": user,
 			"quiz": req.params._id,
-			"isQuizPoll":"no"};
+			"isQuizPoll":"yes"};
 	Polls.addPoll(poll, function(err, poll){
 		if(err){
 			throw err;

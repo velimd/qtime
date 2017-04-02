@@ -33,3 +33,7 @@ module.exports.createUser = function(newUser, callback){
 	});
 }
 
+module.exports.getUserById = function(id, callback){
+	User.findById(id, callback);
+}
+
