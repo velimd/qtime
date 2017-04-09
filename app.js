@@ -19,8 +19,6 @@ app.use(passport.initialize());
 var config = require('./config/database');
 mongoose.connect(config.database);
 
-//require('./config/passport')(passport);
-
 //sessions
 app.use(session({
 	secret:'secret',
@@ -31,8 +29,9 @@ app.use(session({
 app.use(passport.session());
 //gobal variables
 app.use(function (req, res, next) {
-	res.locals.user=null;
 	res.locals.isAuth=false;
+	res.locals.currentquizid=null;
+	res.locals.currentquestionid=null;
 	next();
 });
 //global.user = null;
@@ -65,10 +64,9 @@ passport.use(new LocalStrategy(function(username, password, done) {
 	            return done(err, false);
 	        }
 	        if (user) {
-	        	user.comparePassword(password, function(err, isMatch) {
+	        	User.comparePassword(password, user.password, function(err, isMatch) {
 					if(isMatch){
 						isAuth=true;
-						this.user=user.username;
 						done(null, user);
 					}
 					else{
@@ -104,7 +102,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/api/polls', function(req, res){
-	Polls.getPolls(user, function(err, polls){
+	Polls.getPolls(req.session.passport.user, function(err, polls){
 		if(err){
 			throw err;
 		}
@@ -126,6 +124,7 @@ app.get('/api/polls/:_id', function(req, res){
 		if(err){
 			throw err;
 		}
+		currentquestionid=req.params._id;
 		res.json(poll);
 	});
 });
@@ -137,7 +136,7 @@ app.post('/api/polls', function(req, res){
   			"Answer2": req.body.Answer2,
 			"Answer3": req.body.Answer3,
 			"Answer4": req.body.Answer4,
-			"user": user};
+			"user": req.session.passport.user};
 	Polls.addPoll(poll, function(err, poll){
 		if(err){
 			throw err;
@@ -166,67 +165,7 @@ app.delete('/api/polls/:_id', function(req, res){
 		res.json(poll);
 	});
 });
-/////////////////////////////////////quiz
-
-app.get('/api/quiz', function(req, res){
-	Polls.getQuiz(user, function(err, quiz){
-		if(err){
-			throw err;
-		}
-		res.json(quiz);
-	});
-});
-
-app.get('/api/allquiz', function(req, res){
-	Polls.getAllQuiz(function(err, quiz){
-		if(err){
-			throw err;
-		}
-		res.json(quiz);
-	});
-});
-
-app.get('/api/quizpoll/:_id', function(req, res){
-	Polls.getQuizPolls(user, req.params._id, function(err, polls){
-		if(err){
-			throw err;
-		}
-		res.json(polls);
-	});
-});
-
-app.get('/api/quiz/:_id', function(req, res){
-	Polls.getQuizById(req.params._id, function(err, quiz){
-		if(err){
-			throw err;
-		}
-		res.json(quiz);
-	});
-});
-
-app.post('/api/quiz', function(req, res){
-	var quiz = { 
-			"title": req.body.title,
-			"user": user};
-	Polls.addQuiz(quiz, function(err, poll){
-		if(err){
-			throw err;
-		}
-		res.json(quiz);
-	});
-});
-
-app.put('/api/quiz/:_id', function(req, res){
-	var id = req.params._id;
-	var quiz = req.body;
-	Polls.updateQuiz(id, quiz, {}, function(err, poll){
-		if(err){
-			throw err;
-		}
-		res.json(quiz);
-	});
-});
-
+/////////////////////////////////////Answering
 app.put('/api/answer1/:_id', function(req, res){
 	var id = req.params._id;
 	Polls.updateAnswer1(id, {}, function(err, poll){
@@ -266,6 +205,68 @@ app.put('/api/answer4/:_id', function(req, res){
 		res.json(poll);
 	});
 });
+/////////////////////////////////////quiz
+
+app.get('/api/quiz', function(req, res){
+	Polls.getQuiz(req.session.passport.user, function(err, quiz){
+		if(err){
+			throw err;
+		}
+		res.json(quiz);
+	});
+});
+
+app.get('/api/allquiz', function(req, res){
+	Polls.getAllQuiz(function(err, quiz){
+		if(err){
+			throw err;
+		}
+		res.json(quiz);
+	});
+});
+
+app.get('/api/quizpoll/:_id', function(req, res){
+	Polls.getQuizPolls(req.session.passport.user, req.params._id, function(err, polls){
+		if(err){
+			throw err;
+		}
+		currentquizid=req.params._id;
+		res.json(polls);
+	});
+});
+
+app.get('/api/quiz/:_id', function(req, res){
+	Polls.getQuizById(req.params._id, function(err, quiz){
+		if(err){
+			throw err;
+		}
+		res.json(quiz);
+	});
+});
+
+app.post('/api/quiz', function(req, res){
+	var quiz = { 
+			"title": req.body.title,
+			"user": req.session.passport.user};
+	Polls.addQuiz(quiz, function(err, poll){
+		if(err){
+			throw err;
+		}
+		res.json(quiz);
+	});
+});
+
+app.put('/api/quiz/:_id', function(req, res){
+	var id = req.params._id;
+	var quiz = req.body;
+	Polls.updateQuiz(id, quiz, {}, function(err, poll){
+		if(err){
+			throw err;
+		}
+		res.json(quiz);
+	});
+});
+
 app.delete('/api/quiz/:_id', function(req, res){
 	var id = req.params._id;
 	Polls.deleteQuiz(id, function(err, quiz){
@@ -283,7 +284,7 @@ app.post('/api/quizpoll/:_id', function(req, res){
   			"Answer2": req.body.Answer2,
 			"Answer3": req.body.Answer3,
 			"Answer4": req.body.Answer4,
-			"user": user,
+			"user": req.session.passport.user,
 			"quiz": req.params._id,
 			"isQuizPoll":"yes"};
 	Polls.addPoll(poll, function(err, poll){
@@ -294,6 +295,54 @@ app.post('/api/quizpoll/:_id', function(req, res){
 	});
 });
 
+//////////next and previous quiz
+app.get('/api/npoll/:_id', function(req, res){
+	Polls.getNextPoll(req.session.passport.user, currentquizid, req.params._id, function(err, nextpoll){
+		if(err){
+			throw err;
+		}
+		res.json(nextpoll);
+	});
+});
+
+app.get('/api/ppoll/:_id', function(req, res){
+	Polls.getPreviousPoll(req.session.passport.user, currentquizid, req.params._id, function(err, previouspoll){
+		if(err){
+			throw err;
+		}
+		res.json(previouspoll);
+	});
+});
+///////////////////////////Session
+
+app.get('/api/allsessions', function(req, res){
+	Polls.getAllSessions(function(err, qsession){
+		if(err){
+			throw err;
+		}
+		res.json(qsession);
+	});
+});
+
+app.get('/api/session/:_id', function(req, res){
+	Polls.getSession(req.params._id, function(err, qsession){
+		if(err){
+			throw err;
+		}
+		res.json(qsession);
+	});
+});
+
+app.post('/api/session/:_id', function(req, res){
+	var qsession = { 
+			"question": req.params._id};
+	Polls.createSession(qsession, function(err, qsession){
+		if(err){
+			throw err;
+		}
+		res.json(qsession);
+	});
+});
 ///////////////////////////port
 app.listen(process.env.PORT || 5000);
 console.log('Running on port 5000...');

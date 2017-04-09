@@ -13,15 +13,6 @@ var usersSchema = mongoose.Schema({
 	}
 });
 
-usersSchema.methods.comparePassword = function(userPassword, callback) {
-	bcrypt.compare(userPassword, this.password, function(err, isMatch) {
-     	if(err){
-     		return callback(err);
-     	}
-     	callback(null, isMatch);
-	});
-}
-
 var User = module.exports = mongoose.model('Users', usersSchema);
 
 module.exports.createUser = function(newUser, callback){
@@ -30,6 +21,15 @@ module.exports.createUser = function(newUser, callback){
 	        newUser.password=hash;
 	        newUser.save(callback);
 	    });
+	});
+}
+
+module.exports.comparePassword = function(userPassword, hash, callback) {
+	bcrypt.compare(userPassword, hash, function(err, isMatch) {
+     	if(err){
+     		return callback(err);
+     	}
+     	callback(null, isMatch);
 	});
 }
 

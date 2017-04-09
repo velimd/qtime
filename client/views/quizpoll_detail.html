@@ -1,4 +1,4 @@
-<a class="btn btn-danger" href="#!/polls"> Back</a>
+<a class="btn btn-danger" href="#!/quiz/details/{{poll.quiz}}"> Back</a>
 <p></p>
 <div class="panel panel-default" ng-init="getPoll()">
   <div class="panel-heading">
@@ -26,4 +26,6 @@
 <div class="pull right">
 <a class="btn btn-primary" href="#!/polls/edit/{{poll._id}}"> Edit</a> 
 <a class="btn btn-danger" href="#" ng-click="removePoll(poll._id)">Delete</a>
+<a class="btn btn-primary" ng-click="getNextPoll(poll._id)">Next</a>
+<a class="btn btn-primary" ng-click="getPreviousPoll(poll._id)">Previous</a>
 </div>

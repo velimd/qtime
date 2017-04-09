@@ -43,7 +43,7 @@ var pollsSchema = mongoose.Schema({
 		default: Date.now
 	},
 	user:{ type: String, required: true},
-	quiz: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'}],
+	quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'},
 	isQuizPoll:{type: String, default:"no"}
 });
 
@@ -55,9 +55,14 @@ var quizSchema = mongoose.Schema({
 	user:{type: String, required: true}
 });
 
+var sessionquiz = mongoose.Schema({
+	question: { type: mongoose.Schema.Types.ObjectId, ref: 'Polls', required:true}
+});
 
 var Polls = module.exports = mongoose.model('Polls', pollsSchema);
-var Quiz = module.exports = mongoose.model('Quiz', quizSchema)
+var Quiz = module.exports = mongoose.model('Quiz', quizSchema);
+var Session = module.exports = mongoose.model('Session', sessionquiz);
+
 // Get  Polls
 module.exports.getPolls = function(username, callback, limit){
 	Polls.find({user:username, isQuizPoll:"no"}, callback).limit(limit);
@@ -156,4 +161,39 @@ module.exports.deleteQuiz = function(id, callback){
 
 module.exports.getQuizPolls = function(username, id, callback, limit){
 	Polls.find({user:username, quiz:id}, callback).limit(limit);
+}
+
+///NEXT QUESTION IN QUIZ
+
+module.exports.getNextPoll = function(username, id, pollid, callback, limit){
+	Polls.findOne({user:username, quiz:id, _id:{$gt: pollid}}, callback).sort({_id:1});
+}
+
+///PREVIOUS QUESTION IN QUIZ
+
+module.exports.getPreviousPoll = function(username, id, pollid, callback, limit){
+	Polls.findOne({user:username, quiz:id, _id:{$lt: pollid}}, callback).sort({_id:-1});
+}
+
+//////////////////////////////session
+module.exports.getSession = function(username, id, callback, limit){
+	Session.findById(id, callback);
+}
+
+module.exports.getAllSessions = function(callback, limit){
+	Session.find(callback).limit(limit);
+}
+
+module.exports.createSession = function(poll, callback){
+	Session.create(poll, callback);
+}
+
+module.exports.updateSession = function(id, poll, options, callback){
+	var query = {_id: id};
+	Session.findOneAndUpdate(query, poll, options, callback);
+}
+
+module.exports.deleteSession = function(id, callback){
+	var query = {_id: id};
+	Session.remove(query, callback);
 }
