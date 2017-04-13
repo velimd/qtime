@@ -32,6 +32,7 @@ app.use(function (req, res, next) {
 	res.locals.isAuth=false;
 	res.locals.currentquizid=null;
 	res.locals.currentquestionid=null;
+	res.locals.currentsessionid=null;
 	next();
 });
 //global.user = null;
@@ -301,6 +302,17 @@ app.get('/api/npoll/:_id', function(req, res){
 		if(err){
 			throw err;
 		}
+		if(nextpoll!=null){
+			currentquestionid=nextpoll._id;
+			qsession={
+				"question":currentquestionid
+			};
+			Polls.updateSession(currentsessionid, qsession, {}, function(err, poll){
+				if(err){
+					throw err;
+				}
+			});
+		}
 		res.json(nextpoll);
 	});
 });
@@ -309,6 +321,17 @@ app.get('/api/ppoll/:_id', function(req, res){
 	Polls.getPreviousPoll(req.session.passport.user, currentquizid, req.params._id, function(err, previouspoll){
 		if(err){
 			throw err;
+		}
+		if(previouspoll!=null){
+			currentquestionid=previouspoll._id;
+			qsession={
+				"question":currentquestionid
+			};
+			Polls.updateSession(currentsessionid, qsession, {}, function(err, poll){
+				if(err){
+					throw err;
+				}
+			});
 		}
 		res.json(previouspoll);
 	});
@@ -325,7 +348,7 @@ app.get('/api/allsessions', function(req, res){
 });
 
 app.get('/api/session/:_id', function(req, res){
-	Polls.getSession(req.params._id, function(err, qsession){
+	Polls.getSessionById(req.params._id, function(err, qsession){
 		if(err){
 			throw err;
 		}
@@ -333,14 +356,54 @@ app.get('/api/session/:_id', function(req, res){
 	});
 });
 
-app.post('/api/session/:_id', function(req, res){
-	var qsession = { 
-			"question": req.params._id};
-	Polls.createSession(qsession, function(err, qsession){
+app.get('/api/session', function(req, res){
+	Polls.getSession(req.session.passport.user, function(err, qsession){
 		if(err){
 			throw err;
 		}
 		res.json(qsession);
+	});
+});
+
+app.post('/api/session', function(req, res){
+	Polls.getQuizFirstPolls(req.session.passport.user, currentquizid, function(err, polls){
+		if(err){
+			throw err;
+		}
+		currentquestionid=polls._id;
+
+		newsession={
+			'question':currentquestionid,
+			'user':req.session.passport.user
+		}
+		Polls.createSession(newsession, function(err, qsession){
+			if(err){
+				throw err;
+			}
+			currentsessionid=qsession._id;
+			res.json(qsession);
+		});
+	});
+});
+
+app.put('/api/session', function(req, res){
+	qsession={
+		"question":currentquestionid
+	};
+	Polls.updateSession(currentsessionid, qsession, {}, function(err, poll){
+		if(err){
+			throw err;
+		}
+		res.json(poll);
+	});
+});
+
+app.delete('/api/session', function(req, res){
+	Polls.deleteSession(req.session.passport.user, function(err, session){
+		if(err){
+			throw err;
+		}
+		res.json(currentquizid);
 	});
 });
 ///////////////////////////port

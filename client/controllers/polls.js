@@ -106,4 +106,30 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 			}
 		});
 	}
+
+	$scope.getSession=function(){
+		$http.get('/api/session').then(function(response){
+			$scope.qsession= response.data;
+		});
+	}
+
+	$scope.createSession=function(){
+		$http.post('/api/session').then(function(response){
+			$scope.qsession= response.data;
+			window.location.href="#!/quizpoll/details/"+$scope.qsession.question;
+		});
+	}
+
+	$scope.updateSession=function(){
+		$http.put('/api/session').then(function(response){
+			$scope.qsession= response.data;
+		});
+	}
+
+	$scope.endSession=function(){
+		$http.delete('/api/session').then(function(response){
+			$scope.quiz= response.data;
+			window.location.href='#!/quiz/details/'+$scope.quiz;
+		});
+	}
 }]);

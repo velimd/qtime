@@ -56,7 +56,8 @@ var quizSchema = mongoose.Schema({
 });
 
 var sessionquiz = mongoose.Schema({
-	question: { type: mongoose.Schema.Types.ObjectId, ref: 'Polls', required:true}
+	question: { type: mongoose.Schema.Types.ObjectId, ref: 'Polls', required:true},
+	user:{type: String, required: true}
 });
 
 var Polls = module.exports = mongoose.model('Polls', pollsSchema);
@@ -176,24 +177,30 @@ module.exports.getPreviousPoll = function(username, id, pollid, callback, limit)
 }
 
 //////////////////////////////session
-module.exports.getSession = function(username, id, callback, limit){
+module.exports.getSessionById = function(username, id, callback, limit){
 	Session.findById(id, callback);
 }
-
+module.exports.getSession = function(username, callback, limit){
+	Session.findOne({user:username}, callback).sort({_id: -1});
+}
 module.exports.getAllSessions = function(callback, limit){
 	Session.find(callback).limit(limit);
 }
 
-module.exports.createSession = function(poll, callback){
-	Session.create(poll, callback);
+module.exports.createSession = function(session, callback){
+	Session.create(session, callback);
 }
 
-module.exports.updateSession = function(id, poll, options, callback){
+module.exports.updateSession = function(id, session, options, callback){
 	var query = {_id: id};
-	Session.findOneAndUpdate(query, poll, options, callback);
+	Session.findOneAndUpdate(query, session, options, callback);
 }
 
 module.exports.deleteSession = function(id, callback){
-	var query = {_id: id};
+	var query = {user: id};
 	Session.remove(query, callback);
+}
+
+module.exports.getQuizFirstPolls = function(username, id, callback, limit){
+	Polls.findOne({user:username, quiz:id}, callback);
 }
