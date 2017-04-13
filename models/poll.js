@@ -177,7 +177,7 @@ module.exports.getPreviousPoll = function(username, id, pollid, callback, limit)
 }
 
 //////////////////////////////session
-module.exports.getSessionById = function(username, id, callback, limit){
+module.exports.getSessionById = function(id, callback){
 	Session.findById(id, callback);
 }
 module.exports.getSession = function(username, callback, limit){
