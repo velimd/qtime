@@ -21,14 +21,24 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 	$scope.addPoll=function(){
 		console.log($scope.poll);
 		$http.post('/api/polls/', $scope.poll).then(function(response){
-			window.location.href='#!/polls';
+			if(response.data.success){
+				window.location.href='#!/polls';
+			}
+			else{
+				$scope.error=false;
+			}
 		});
 	}
 
 	$scope.updatePoll=function(){
 		var id = $routeParams.id;
 		$http.put('/api/polls/'+id, $scope.poll).then(function(response){
-			window.location.href='#!/polls';
+			if(response.data.success){
+				window.location.href='#!/polls';
+			}
+			else{
+				$scope.error=false;
+			}
 		});
 	}
 
@@ -56,14 +66,24 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 	$scope.addQuiz=function(){
 		console.log($scope.quiz);
 		$http.post('/api/quiz/', $scope.quiz).then(function(response){
-			window.location.href='#!/polls';
+			if(response.data.success){
+				window.location.href='#!/polls';
+			}
+			else{
+				$scope.error=false;
+			}
 		});
 	}
 
 	$scope.updateQuiz=function(){
 		var id = $routeParams.id;
 		$http.put('/api/quiz/'+id, $scope.quiz).then(function(response){
-			window.location.href='#!/polls';
+			if(response.data.success){
+				window.location.href='#!/polls';
+			}
+			else{
+				$scope.error=false;
+			}
 		});
 	}
 
@@ -77,7 +97,12 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 		var id = $routeParams.id;
 		console.log(id);
 		$http.post('/api/quizpoll/'+id, $scope.quizpoll).then(function(response){
-			window.location.href='#!/polls';
+			if(response.data.success){
+				window.location.href='#!/quiz/details/'+id;
+			}
+			else{
+				$scope.error=false;
+			}
 		});
 	}
 
@@ -131,5 +156,60 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 			$scope.quiz= response.data;
 			window.location.href='#!/quiz/details/'+$scope.quiz;
 		});
+	}
+	$scope.logoutUser=function(){
+		$http.get('/api/logout').then(function(response){
+			if(response.data.success){
+				window.location.href='#';
+			}
+		});
+	}
+	$scope.resetAnswer=function(){
+		var id = $routeParams.id;
+		$http.put('/api/resetanswer/'+id, $scope.poll).then(function(response){
+			window.location.href='#!/polls/details/'+id;
+		});
+	}
+
+	$scope.resetQAnswer=function(){
+		var id = $routeParams.id;
+		$http.put('/api/resetanswer/'+id, $scope.poll).then(function(response){
+			window.location.href='#!/quizpoll/details/'+id;
+		});
+	}
+
+	$scope.resetQPAnswer=function(){
+		var id = $routeParams.id;
+		$http.put('/api/resetanswer/'+id, $scope.poll).then(function(response){
+			window.location.href='#!/qp/details/'+id;
+		});
+	}
+
+	$scope.refresh=function(){
+		var id = $routeParams.id;
+		$http.get('/api/polls/'+id).then(function(response){
+			console.log(response.data);
+			$scope.poll= response.data;
+			window.location.href='#!/polls/details/'+id;
+		});
+	}
+	$scope.qrefresh=function(){
+		var id = $routeParams.id;
+		$http.get('/api/polls/'+id).then(function(response){
+			console.log(response.data);
+			$scope.poll= response.data;
+			window.location.href='#!/quizpoll/details/'+id;
+		});
+	}
+	$scope.qprefresh=function(){
+		var id = $routeParams.id;
+		$http.get('/api/polls/'+id).then(function(response){
+			console.log(response.data);
+			$scope.poll= response.data;
+			window.location.href='#!/qp/details/'+id;
+		});
+	}
+	$scope.back=function(){
+		window.history.back();
 	}
 }]);

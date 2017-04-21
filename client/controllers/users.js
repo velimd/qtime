@@ -5,7 +5,12 @@ myApp.controller('UsersController', ['$scope', '$http', '$location', '$routePara
 	$scope.createUser=function(){
 		console.log($scope.user);
 		$http.post('/api/signup/', $scope.user).then(function(response){
-			window.location.href='#!/';
+			if(response.data.success){
+				window.location.href='#!/';
+			}
+			else{
+				$scope.user=response.data;
+			}
 		});
 	}
 	$scope.loginUser=function(){
@@ -14,7 +19,7 @@ myApp.controller('UsersController', ['$scope', '$http', '$location', '$routePara
 				window.location.href='#!/polls';
 			}
 			else{
-				console.log("user not found");
+				$scope.user=response.data;
 			}
 		});
 	}

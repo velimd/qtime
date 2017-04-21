@@ -1,3 +1,4 @@
+<a class="btn btn-danger" ng-click=back()> Back</a>
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Add Quiz</h3>
@@ -5,8 +6,9 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-md-12">
-    	<form ng-submit="addQuiz()">
+    	<form name="form" ng-submit="addQuiz()">
         <div class="form-group">
+        <div class="alert alert-danger" ng-show="form.$submitted && error!=true"> Please enter all fields </div>
           <label>Title</label>
           <input type="text" class="form-control" ng-model="quiz.title" placeholder="Enter Title">
        </div> 
@@ -16,4 +18,3 @@
     </div>
   </div>
 </div>
-<a class="btn btn-danger" href="#!/polls"> Back</a>

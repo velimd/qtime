@@ -26,6 +26,7 @@ app.use(session({
 	resave:true
 }));
 
+app.use(passport.initialize());
 app.use(passport.session());
 //gobal variables
 app.use(function (req, res, next) {
@@ -94,6 +95,14 @@ app.post('/api/authenticate', passport.authenticate('local'), function(req, res)
 	res.json({success: true, msg: 'Successful login.'});
 });
 
+app.get('/api/logout', function(req, res){
+	isAuth=false;
+	currentquizid=null;
+	currentquestionid=null;
+	currentsessionid=null;
+	req.logout();
+	res.json({success: true, msg: 'Successful logout.'});
+});
 /////////////////////////////////////poll
 
 Polls = require('./models/poll');
@@ -131,30 +140,40 @@ app.get('/api/polls/:_id', function(req, res){
 });
 
 app.post('/api/polls', function(req, res){
-	var poll = { 
-			"Question": req.body.Question,
-  			"Answer1": req.body.Answer1,
-  			"Answer2": req.body.Answer2,
-			"Answer3": req.body.Answer3,
-			"Answer4": req.body.Answer4,
-			"user": req.session.passport.user};
-	Polls.addPoll(poll, function(err, poll){
-		if(err){
-			throw err;
-		}
-		res.json(poll);
-	});
+	if(!req.body.Question||!req.body.Answer1||!req.body.Answer2||!req.body.Answer3||!req.body.Answer4){
+		res.json({success:false, msg: 'Please enter all fields'});
+	}
+	else{
+		var poll = { 
+				"Question": req.body.Question,
+	  			"Answer1": req.body.Answer1,
+	  			"Answer2": req.body.Answer2,
+				"Answer3": req.body.Answer3,
+				"Answer4": req.body.Answer4,
+				"user": req.session.passport.user};
+		Polls.addPoll(poll, function(err, poll){
+			if(err){
+				throw err;
+			}
+			res.json({success:true, msg: 'Poll added'});
+		});
+	}
 });
 
 app.put('/api/polls/:_id', function(req, res){
-	var id = req.params._id;
-	var poll = req.body;
-	Polls.updatePoll(id, poll, {}, function(err, poll){
-		if(err){
-			throw err;
-		}
-		res.json(poll);
-	});
+	if(!req.body.Question||!req.body.Answer1||!req.body.Answer2||!req.body.Answer3||!req.body.Answer4){
+		res.json({success:false, msg: 'Please enter all fields'});
+	}
+	else{
+		var id = req.params._id;
+		var poll = req.body;
+		Polls.updatePoll(id, poll, {}, function(err, poll){
+			if(err){
+				throw err;
+			}
+			res.json({success:true, msg: 'Poll added'});
+		});
+	}
 });
 
 app.delete('/api/polls/:_id', function(req, res){
@@ -206,6 +225,15 @@ app.put('/api/answer4/:_id', function(req, res){
 		res.json(poll);
 	});
 });
+app.put('/api/resetanswer/:_id', function(req, res){
+	var id = req.params._id;
+	Polls.resetAnswers(id, {}, function(err, poll){
+		if(err){
+			throw err;
+		}
+		res.json(poll);
+	});
+});
 /////////////////////////////////////quiz
 
 app.get('/api/quiz', function(req, res){
@@ -246,26 +274,36 @@ app.get('/api/quiz/:_id', function(req, res){
 });
 
 app.post('/api/quiz', function(req, res){
-	var quiz = { 
-			"title": req.body.title,
-			"user": req.session.passport.user};
-	Polls.addQuiz(quiz, function(err, poll){
-		if(err){
-			throw err;
-		}
-		res.json(quiz);
-	});
+	if(!req.body.title){
+		res.json({success:false, msg: 'Please enter title'});
+	}else
+	{
+		var quiz = { 
+				"title": req.body.title,
+				"user": req.session.passport.user};
+		Polls.addQuiz(quiz, function(err, poll){
+			if(err){
+				throw err;
+			}
+			res.json({success:true, msg: 'Quiz added'});
+		});
+	}
 });
 
 app.put('/api/quiz/:_id', function(req, res){
-	var id = req.params._id;
-	var quiz = req.body;
-	Polls.updateQuiz(id, quiz, {}, function(err, poll){
-		if(err){
-			throw err;
-		}
-		res.json(quiz);
-	});
+	if(!req.body){
+		res.json({success:false, msg: 'Please enter all fields'});
+	}
+	else{	
+		var id = req.params._id;
+		var quiz = req.body;
+		Polls.updateQuiz(id, quiz, {}, function(err, poll){
+			if(err){
+				throw err;
+			}
+			res.json({success:true, msg: 'Quiz Updated'});
+		});
+	}
 });
 
 app.delete('/api/quiz/:_id', function(req, res){
@@ -279,21 +317,26 @@ app.delete('/api/quiz/:_id', function(req, res){
 });
 
 app.post('/api/quizpoll/:_id', function(req, res){
-	var poll = { 
-			"Question": req.body.Question,
-  			"Answer1": req.body.Answer1,
-  			"Answer2": req.body.Answer2,
-			"Answer3": req.body.Answer3,
-			"Answer4": req.body.Answer4,
-			"user": req.session.passport.user,
-			"quiz": req.params._id,
-			"isQuizPoll":"yes"};
-	Polls.addPoll(poll, function(err, poll){
-		if(err){
-			throw err;
-		}
-		res.json(poll);
-	});
+	if(!req.body.Question||!req.body.Answer1||!req.body.Answer2||!req.body.Answer3||!req.body.Answer4){
+		res.json({success:false, msg: 'Please enter all fields'});
+	}
+	else{
+		var poll = { 
+				"Question": req.body.Question,
+	  			"Answer1": req.body.Answer1,
+	  			"Answer2": req.body.Answer2,
+				"Answer3": req.body.Answer3,
+				"Answer4": req.body.Answer4,
+				"user": req.session.passport.user,
+				"quiz": req.params._id,
+				"isQuizPoll":"yes"};
+		Polls.addPoll(poll, function(err, poll){
+			if(err){
+				throw err;
+			}
+			res.json({success:true, msg: 'Poll Added'});
+		});
+	}
 });
 
 //////////next and previous quiz

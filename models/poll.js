@@ -119,6 +119,11 @@ module.exports.updateAnswer4 = function(id, options, callback){
 	Polls.findOneAndUpdate(query, {$inc: {Score4:1}}, options, callback);
 }
 
+module.exports.resetAnswers = function(id, options, callback){
+	var query = {_id: id};
+	Polls.findOneAndUpdate(query, {$set: {Score1: 0, Score2: 0, Score3: 0, Score4:0}}, options, callback);
+}
+
 //Delete Poll
 module.exports.deletePoll = function(id, callback){
 	var query = {_id: id};

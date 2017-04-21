@@ -26,7 +26,11 @@
 <div class="pull right">
 <a class="btn btn-primary" href="#!/polls/edit/{{poll._id}}"> Edit</a> 
 <a class="btn btn-danger" href="#" ng-click="removePoll(poll._id)">Delete</a>
+</div>
+<div>
 <a class="btn btn-primary" ng-click="getNextPoll(poll._id)">Next</a>
 <a class="btn btn-primary" ng-click="getPreviousPoll(poll._id)">Previous</a>
 <a class="btn btn-primary" ng-click="endSession()">End</a>
+<a class="btn btn-primary" href="#" ng-click="resetQAnswer()">Reset Score</a>
+<a class="btn btn-primary" href="#" ng-click="qrefresh()">Refresh Score</a>
 </div>
