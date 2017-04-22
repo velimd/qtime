@@ -53,6 +53,10 @@ myApp.config(function($routeProvider){
 		controller:'PollsController',
 		templateUrl: 'views/qp_details.html'
 	})
+	.when('/qp/edit/:id',{
+		controller:'PollsController',
+		templateUrl: 'views/edit_qp.html'
+	})
 	.otherwise({
 		redirectTo: '/'
 	});

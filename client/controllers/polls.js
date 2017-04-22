@@ -79,7 +79,7 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 		var id = $routeParams.id;
 		$http.put('/api/quiz/'+id, $scope.quiz).then(function(response){
 			if(response.data.success){
-				window.location.href='#!/polls';
+				window.location.href='#!/quiz/details/'+id;
 			}
 			else{
 				$scope.error=false;
@@ -167,21 +167,24 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 	$scope.resetAnswer=function(){
 		var id = $routeParams.id;
 		$http.put('/api/resetanswer/'+id, $scope.poll).then(function(response){
-			window.location.href='#!/polls/details/'+id;
+			$scope.poll=response.data;
+			$scope.refresh();
 		});
 	}
 
 	$scope.resetQAnswer=function(){
 		var id = $routeParams.id;
 		$http.put('/api/resetanswer/'+id, $scope.poll).then(function(response){
-			window.location.href='#!/quizpoll/details/'+id;
+			$scope.poll=response.data;
+			$scope.qrefresh();
 		});
 	}
 
 	$scope.resetQPAnswer=function(){
 		var id = $routeParams.id;
 		$http.put('/api/resetanswer/'+id, $scope.poll).then(function(response){
-			window.location.href='#!/qp/details/'+id;
+			$scope.poll=response.data;
+			$scope.qprefresh();
 		});
 	}
 
@@ -190,7 +193,7 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 		$http.get('/api/polls/'+id).then(function(response){
 			console.log(response.data);
 			$scope.poll= response.data;
-			window.location.href='#!/polls/details/'+id;
+			$route.reload();
 		});
 	}
 	$scope.qrefresh=function(){
@@ -198,7 +201,7 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 		$http.get('/api/polls/'+id).then(function(response){
 			console.log(response.data);
 			$scope.poll= response.data;
-			window.location.href='#!/quizpoll/details/'+id;
+			$route.reload();
 		});
 	}
 	$scope.qprefresh=function(){
@@ -206,10 +209,28 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 		$http.get('/api/polls/'+id).then(function(response){
 			console.log(response.data);
 			$scope.poll= response.data;
-			window.location.href='#!/qp/details/'+id;
+			$route.reload();
 		});
 	}
 	$scope.back=function(){
 		window.history.back();
+	}
+
+	$scope.updateQPoll=function(){
+		var id = $routeParams.id;
+		$http.put('/api/polls/'+id, $scope.poll).then(function(response){
+			if(response.data.success){
+				window.location.href='#!/quiz/details/'+$scope.poll.quiz;
+			}
+			else{
+				$scope.error=false;
+			}
+		});
+	}
+
+	$scope.removeQPoll=function(id){
+		$http.delete('/api/polls/'+id).then(function(response){
+			window.location.href='#!/quiz/details/'+$scope.poll.quiz;
+		});
 	}
 }]);
