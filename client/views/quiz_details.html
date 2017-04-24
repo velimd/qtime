@@ -1,6 +1,7 @@
 <a class="btn btn-danger" href="#!/polls"> Back</a>
 <p></p>
 <div class="panel panel-default" ng-init="getQuiz(); getQuizPoll()">
+<div class="alert alert-danger" ng-show="error==false"> Quiz must have a minimum of 1 question to start </div>
   <div class="panel-heading">
     <h3 class="panel-title">{{quiz.title}}</h3>
   </div>
@@ -20,5 +21,5 @@
 <a class="btn btn-primary" href="#!/quiz/edit/{{quiz._id}}"> Edit</a> 
 <a class="btn btn-danger" ng-click="removeQuiz(quiz._id)">Delete</a>
 <a class="btn btn-primary" href="#!/quiz/addpoll/{{quiz._id}}"> Add</a>
-<a class="btn btn-primary" ng-click="createSession()">Start</a>
+<a class="btn btn-primary" name="start" ng-click="createSession()">Start</a>
 </div>

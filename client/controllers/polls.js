@@ -109,8 +109,12 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 	$scope.getQuizPoll=function(){
 		var id = $routeParams.id;
 		$http.get('/api/quizpoll/'+id).then(function(response){
-			console.log(response.data);
-			$scope.quizpoll= response.data;
+			if(response.data!=''){
+				$scope.quizpoll= response.data;
+			}
+			else{
+				$scope.error=false;
+			}
 		});
 	}
 
@@ -140,8 +144,13 @@ myApp.controller('PollsController', ['$scope', '$http', '$location', '$routePara
 
 	$scope.createSession=function(){
 		$http.post('/api/session').then(function(response){
-			$scope.qsession= response.data;
-			window.location.href="#!/quizpoll/details/"+$scope.qsession.question;
+			if(response.data!=null){
+				$scope.qsession=response.data;
+				window.location.href="#!/quizpoll/details/"+$scope.qsession.question;
+			}
+			else{
+				$scope.error=false;
+			}
 		});
 	}
 

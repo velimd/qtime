@@ -413,19 +413,24 @@ app.post('/api/session', function(req, res){
 		if(err){
 			throw err;
 		}
-		currentquestionid=polls._id;
+		if(polls!=null){
+			currentquestionid=polls._id;
 
-		newsession={
-			'question':currentquestionid,
-			'user':req.session.passport.user
-		}
-		Polls.createSession(newsession, function(err, qsession){
-			if(err){
-				throw err;
+			newsession={
+				'question':currentquestionid,
+				'user':req.session.passport.user
 			}
-			currentsessionid=qsession._id;
-			res.json(qsession);
-		});
+			Polls.createSession(newsession, function(err, qsession){
+				if(err){
+					throw err;
+				}
+				currentsessionid=qsession._id;
+				res.json(qsession);
+			});
+		}
+		else{
+			res.json(null);
+		}
 	});
 });
 

@@ -1,8 +1,7 @@
-<a class="btn btn-danger" href="#!/quiz/details/{{poll.quiz}}"> Back</a>
-<p></p>
 <div class="panel panel-default" ng-init="getPoll(); getSession()">
   <div class="panel-heading">
-    <h3 class="panel-title">{{poll.Question}} {{qsession._id}}</h3>
+    <h3 class="panel-title">{{poll.Question}}</h3>
+    <h3 class="panel-title">ID: {{qsession._id}}</h3>
   </div>
   <div class="panel-body">
     <div class="row">
@@ -27,10 +26,11 @@
 <a class="btn btn-primary" href="#!/qp/edit/{{poll._id}}"> Edit</a> 
 <a class="btn btn-danger" ng-click="removeQPoll(poll._id)">Delete</a>
 </div>
+<p></p>
 <div>
 <a class="btn btn-primary" ng-click="getNextPoll(poll._id)">Next</a>
 <a class="btn btn-primary" ng-click="getPreviousPoll(poll._id)">Previous</a>
-<a class="btn btn-primary" ng-click="endSession()">End</a>
+<a class="btn btn-danger" ng-click="endSession()">End</a>
 <a class="btn btn-primary" ng-click="resetQAnswer()">Reset Score</a>
 <a class="btn btn-primary" ng-click="qrefresh()">Refresh Score</a>
 </div>
