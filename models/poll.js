@@ -48,7 +48,7 @@ var pollsSchema = mongoose.Schema({
 		default: Date.now
 	},
 	user:{ type: String, required: true},
-	quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'},
+	quiz: { type: String},
 	isQuizPoll:{type: String, default:"no"}
 });
 
@@ -65,7 +65,11 @@ var quizSchema = mongoose.Schema({
 });
 
 var sessionquiz = mongoose.Schema({
-	question: { type: mongoose.Schema.Types.ObjectId, ref: 'Polls', required:true},
+	_id: {
+    	type: String,
+    	'default': shortid.generate
+	},
+	question: { type: String, required:true},
 	user:{type: String, required: true}
 });
 
