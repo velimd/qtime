@@ -53,6 +53,10 @@ var pollsSchema = mongoose.Schema({
 });
 
 var quizSchema = mongoose.Schema({
+	_id: {
+    	type: String,
+    	'default': shortid.generate
+	},
 	title:{
 		type: String,
 		required: true
