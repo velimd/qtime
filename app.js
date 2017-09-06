@@ -103,8 +103,9 @@ app.get('/api/logout', function(req, res){
 	req.logout();
 	res.json({success: true, msg: 'Successful logout.'});
 });
+//////////////////////////////////////////////////////////
 /////////////////////////////////////poll
-
+///////////////////////////////////////////////////
 Polls = require('./models/poll');
 
 app.get('/', function(req, res){
@@ -185,7 +186,10 @@ app.delete('/api/polls/:_id', function(req, res){
 		res.json(poll);
 	});
 });
+
+//////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////Answering
+////////////////////////////////////////////////////////////////////
 app.put('/api/answer1/:_id', function(req, res){
 	var id = req.params._id;
 	Polls.updateAnswer1(id, {}, function(err, poll){
@@ -234,8 +238,9 @@ app.put('/api/resetanswer/:_id', function(req, res){
 		res.json(poll);
 	});
 });
+//////////////////////////////////////////////////////////////////
 /////////////////////////////////////quiz
-
+//////////////////////////////////////////////////////////////
 app.get('/api/quiz', function(req, res){
 	Polls.getQuiz(req.session.passport.user, function(err, quiz){
 		if(err){
@@ -338,8 +343,9 @@ app.post('/api/quizpoll/:_id', function(req, res){
 		});
 	}
 });
-
+//////////////////////////////////////////////////////////
 //////////next and previous quiz
+//////////////////////////////////////////////////////
 app.get('/api/npoll/:_id', function(req, res){
 	Polls.getNextPoll(req.session.passport.user, currentquizid, req.params._id, function(err, nextpoll){
 		if(err){
@@ -379,8 +385,9 @@ app.get('/api/ppoll/:_id', function(req, res){
 		res.json(previouspoll);
 	});
 });
+//////////////////////////////////////////////////////////
 ///////////////////////////Session
-
+///////////////////////////////////////////////////////////////
 app.get('/api/allsessions', function(req, res){
 	Polls.getAllSessions(function(err, qsession){
 		if(err){
@@ -454,6 +461,8 @@ app.delete('/api/session', function(req, res){
 		res.json(currentquizid);
 	});
 });
+/////////////////////////////////////////////////////////
 ///////////////////////////port
-app.listen(process.env.PORT || 5000);
-console.log('Running on port 5000...');
+//////////////////////////////////////////////////////////////
+app.listen(process.env.PORT || 8080);
+console.log('Running on port 8080...');

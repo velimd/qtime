@@ -1,7 +1,12 @@
 var mongoose = require('mongoose');
+var shortid = require('shortid');
 
 // Polls Schema
 var pollsSchema = mongoose.Schema({
+	_id: {
+    	type: String,
+    	'default': shortid.generate
+	},
 	Question:{
 		type: String,
 		required: true,
