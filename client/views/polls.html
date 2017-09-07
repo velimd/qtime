@@ -1,35 +1,39 @@
-<div class="btn btn-danger" style="float:right;" ng-click="logoutUser()">logout</div>
-<div class="panel panel-default" ng-init="getPolls()">
-  <div class="panel-heading">
-    <h3 class="panel-title">Questions</h3>
-  </div>
-  <div class="panel-body">
-    <div class="row">
-    	<div ng-repeat="poll in polls">
-    		<ul class="list">
-          <li>
-            <a href="#!/polls/details/{{poll._id}}"> {{poll.Question}}</a>
-            </li>
-    		</ul>
-    	</div>
-    </div>
-    <a class="btn btn-primary" href="#!/polls/add"> Add</a>
-  </div>
+<div class="row">
+  <div class="btn btn-danger" style="float:right; margin-bottom:5px; " ng-click="logoutUser()">logout</div>
 </div>
-<div class="panel panel-default" ng-init="getQuizzes()">
-  <div class="panel-heading">
-    <h3 class="panel-title">Quizzes</h3>
-  </div>
-  <div class="panel-body">
-      <div class="row">
-        <div ng-repeat="quiz in quizzes">
-          <ul class="list">
-            <li>
-              <a href="#!/quiz/details/{{quiz._id}}"> {{quiz.title}}</a>
-              </li>
-          </ul>
-        </div>
-      </div>
-      <a class="btn btn-primary" href="#!/quiz/add"> Add</a>
+<div class="container">
+  <div class="panel panel-default" ng-init="getPolls()">
+    <div class="panel-heading">
+      <h3 class="panel-title">Questions</h3>
     </div>
+    <div class="panel-body">
+      <div class="row">
+      	<div ng-repeat="poll in polls">
+      		<ul class="list">
+            <li>
+              <a href="#!/polls/details/{{poll._id}}"> {{poll.Question}}</a>
+              </li>
+      		</ul>
+      	</div>
+      </div>
+      <a class="btn btn-primary" href="#!/polls/add"> Add</a>
+    </div>
+  </div>
+  <div class="panel panel-default" ng-init="getQuizzes()">
+    <div class="panel-heading">
+      <h3 class="panel-title">Quizzes</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+          <div ng-repeat="quiz in quizzes">
+            <ul class="list">
+              <li>
+                <a href="#!/quiz/details/{{quiz._id}}"> {{quiz.title}}</a>
+                </li>
+            </ul>
+          </div>
+        </div>
+        <a class="btn btn-primary" href="#!/quiz/add"> Add</a>
+      </div>
+  </div>
 </div>

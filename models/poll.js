@@ -1,10 +1,12 @@
 var mongoose = require('mongoose');
 var shortid = require('shortid');
 
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ#@');
 // Polls Schema
 var pollsSchema = mongoose.Schema({
 	_id: {
     	type: String,
+    	unique: true,
     	'default': shortid.generate
 	},
 	Question:{
