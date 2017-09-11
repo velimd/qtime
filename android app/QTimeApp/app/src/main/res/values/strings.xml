@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">QTime</string>
+    <string name="id_label">Enter ID</string>
+    <string name="id_value">[ID]</string>
+    <string name="btn_label">Enter</string>
+    <string name="Answer1">Answer1</string>
+    <string name="Answer2">Answer1</string>
+    <string name="Answer3">Answer1</string>
+    <string name="Answer4">Answer1</string>
+</resources>
